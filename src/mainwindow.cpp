@@ -3,7 +3,9 @@
 
 #include <QString>
 #include <QClipboard>
-#include <QCryptographicHash>
+#include <QIntValidator>
+
+#include "passwordgenerator.h"
 
 MainWindow::MainWindow(QWidget *parent) :
   QMainWindow(parent),
@@ -24,20 +26,31 @@ MainWindow::~MainWindow()
 void MainWindow::on_generate_pushButton_clicked()
 {
   QString counter = ui->counter_lineEdit->text();
-  counter += QString(counter.size());
-
   QString site = ui->site_lineEdit->text();
-  site += QString(site.size());
-
   QString username = ui->username_lineEdit->text();
-  username += QString(username.size());
-
   QString password = ui->password_lineEdit->text();
-  password += QString(password.size());
 
-  QString feed = counter + site + username + password;
-
-  QString generated_password = QString((QCryptographicHash::hash(feed.toStdString().c_str(), QCryptographicHash::Keccak_256)).toBase64()); // @todo PAD before feeding
+  QString generated_password = CPasswordGenerator::generate(site, username, password, counter);
 
   QApplication::clipboard()->setText(generated_password);
+}
+
+void MainWindow::on_site_lineEdit_returnPressed()
+{
+    this->focusNextChild();
+}
+
+void MainWindow::on_username_lineEdit_returnPressed()
+{
+  this->focusNextChild();
+}
+
+void MainWindow::on_password_lineEdit_returnPressed()
+{
+  this->focusNextChild();
+}
+
+void MainWindow::on_counter_lineEdit_returnPressed()
+{
+  this->focusNextChild();
 }

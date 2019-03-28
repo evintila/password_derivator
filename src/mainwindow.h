@@ -18,6 +18,14 @@ public:
 private slots:
   void on_generate_pushButton_clicked();
 
+  void on_site_lineEdit_returnPressed();
+
+  void on_username_lineEdit_returnPressed();
+
+  void on_password_lineEdit_returnPressed();
+
+  void on_counter_lineEdit_returnPressed();
+
 private:
   Ui::MainWindow *ui;
 };
