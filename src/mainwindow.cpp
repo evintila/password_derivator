@@ -5,7 +5,7 @@
 #include <QClipboard>
 #include <QIntValidator>
 
-#include "passwordgenerator.h"
+#include "passwordderivator.h"
 
 MainWindow::MainWindow(QWidget *parent) :
   QMainWindow(parent),
@@ -30,7 +30,7 @@ void MainWindow::on_generate_pushButton_clicked()
   QString username = ui->username_lineEdit->text();
   QString password = ui->password_lineEdit->text();
 
-  QString generated_password = CPasswordGenerator::generate(site, username, password, counter);
+  QString generated_password = CPasswordDerivator::generate(site, username, password, counter);
 
   QApplication::clipboard()->setText(generated_password);
 }

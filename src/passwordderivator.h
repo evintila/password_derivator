@@ -4,7 +4,7 @@
 #include <QString>
 #include <QByteArray>
 
-class CPasswordGenerator
+class CPasswordDerivator
 {
 public:
   static QString generate(const QString &site, const QString &username,
