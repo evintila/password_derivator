@@ -1,0 +1,21 @@
+{
+  "manifest_version": 2,
+  "name": "password-derivator",
+  "version": "0.1a",
+
+  "description": "test",
+  "icons": {
+    "48": "icons/lock.png"
+  },
+
+  "permissions": [
+  ],
+
+  "browser_action": {
+    "default_icon": {
+     "48" : "icons/lock.png"
+    },
+    "default_title": "password-derivator",
+    "default_popup": "popup/password_derivator.html"
+  }
+}
