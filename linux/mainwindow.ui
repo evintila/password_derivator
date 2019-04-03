@@ -42,7 +42,7 @@
      <item>
       <widget class="QLineEdit" name="counter_lineEdit">
        <property name="text">
-        <string>0</string>
+        <string/>
        </property>
       </widget>
      </item>
