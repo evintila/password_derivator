@@ -7,7 +7,8 @@
 class CPasswordDerivator
 {
 public:
-  static QString generate(const QString &site, const QString &username,
+  // derives a password from the input parameters
+  static QString derive(const QString &site, const QString &username,
                           const QString &password, const QString &counter);
 
 private:

@@ -18,26 +18,31 @@ MainWindow::MainWindow(QWidget *parent) :
 
 MainWindow::~MainWindow()
 {
-  QApplication::clipboard()->clear();
+  // clear the clipboard when exiting?
+  //QApplication::clipboard()->clear();
 
   delete ui;
 }
 
 void MainWindow::on_generate_pushButton_clicked()
 {
+  // get the parameters provided by the user
   QString counter = ui->counter_lineEdit->text();
   QString site = ui->site_lineEdit->text();
   QString username = ui->username_lineEdit->text();
   QString password = ui->password_lineEdit->text();
 
-  QString generated_password = CPasswordDerivator::generate(site, username, password, counter);
+  // derive the password from the parameters
+  QString derived_password = CPasswordDerivator::derive(site, username, password, counter);
 
-  QApplication::clipboard()->setText(generated_password);
+  // put the derived password in the clipboard
+  QApplication::clipboard()->setText(derived_password);
 }
 
 void MainWindow::on_site_lineEdit_returnPressed()
 {
-    this->focusNextChild();
+  // move the focus to the next text input field
+  this->focusNextChild();
 }
 
 void MainWindow::on_username_lineEdit_returnPressed()
