@@ -14,19 +14,38 @@ deriveBtn.addEventListener('click', onDerive);
 copyBtn.addEventListener('click', onCopy);
 
 
-/* derive a password from the input parameters and put in the clipboard */
+/* handle request to derive a password from the input parameters */
 async function onDerive() {
-  var site = inputSite.value;
-  var username = inputUsername.value;
-  var password = inputPassword.value;
-  var counter = inputCounter.value;
+  const site = inputSite.value;
+  const username = inputUsername.value;
+  const password = inputPassword.value;
+  const counter = inputCounter.value;
 
-  derivedPassword = await sha256(site);
-  console.log(derivedPassword);
+  derivedPassword = await derivePassword(site, username, password, counter);
 }
 
-/* copy the generated password to the clipboard */
+
+/* derive the password */
+async function derivePassword(site, username, password, counter) {
+  // concatenate padded parameters and hash
+  
+  const feed = pad(site) + pad(username) + pad(password) + pad(counter);
+  
+  var hashedValue = await hash(feed);
+  return hashedValue;
+}
+
+/* pad the feed with its length to avoid concatenation collisions 
+  ("ab" + "b" == "a" + "bc")
+*/
+function pad(feed) {
+  return feed + feed.length;
+}
+
+
+/* put the derived password in the clipboard */
 function onCopy() {
+  // use a textArea to copy to clipboard
   var textArea = document.createElement("textarea");
 
   // do not display the derived password on the screen
@@ -45,11 +64,15 @@ function onCopy() {
 
   textArea.style.background = 'transparent';
 
+  // set the value to be copied
+  textArea.value = derivedPassword;
+
   document.body.appendChild(textArea);
 
+
+  // select and copy
   textArea.focus();
   textArea.select();
-
   try {
     if ( false == document.execCommand('copy') ) {
       console.log("Unable to copy to clipboard");
@@ -58,19 +81,33 @@ function onCopy() {
     console.log("Unable to copy to clipboard");
   }
 
+  // remove the no longer needed textArea
   document.body.removeChild(textArea);
 }
 
-/* sha256: TODO */
-async function sha256(message) {
-    // encode as UTF-8
-    const msgBuffer = new TextEncoder('utf-8').encode(message);     
 
-    const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer)
+/* hash and base64 encode */
+async function hash(feed) {
+    // utf8 encode the feed
+    const utf8Feed = new TextEncoder('utf-8').encode(feed);
 
-    const hashArray = Array.from(new Uint8Array(hashBuffer));
+    // hash the feed using SHA-256
+    const hashedFeed = await crypto.subtle.digest('SHA-256', utf8Feed);
 
-    // convert bytes to hex string                  
-    const hashHex = hashArray.map(b => ('00' + b.toString(16)).slice(-2)).join('');
-    return hashHex;
+
+    // convert the hashed feed to a string binary representation
+    const hashedFeedArray = new Uint8Array(hashedFeed);
+
+    var binaryString = "";
+    for (var i = 0; i < hashedFeedArray.byteLength; i++) {
+        binaryString += String.fromCharCode(hashedFeedArray[i]);
+    }
+
+
+    // convert to base64 and trim
+    const base64String = btoa(binaryString);
+    // the hash result has 32 bytes and the base64 encoding pads it to 33    
+    const trimmedBase64String = base64String.substring(0, base64String.length - 1);
+    
+    return trimmedBase64String;
 }
