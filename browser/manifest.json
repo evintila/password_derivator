@@ -3,7 +3,7 @@
   "name": "password-derivator",
   "version": "0.1a",
 
-  "description": "test",
+  "description": "Stateless password derivator",
   "icons": {
     "48": "icons/lock.png"
   },
